@@ -53,6 +53,9 @@ updateForm.addEventListener('submit', (e) => {
         renderTracker();
         alert(`Day ${day} updated successfully!`);
         updateForm.reset();
+        
+        // Call the backend to update the markdown file on GitHub
+        sendDataToBackend();
     } else {
         alert("Invalid day number! Please select a day between 1 and 90.");
     }
@@ -68,3 +71,62 @@ function editDay(day) {
 
 // Initial render on page load
 renderTracker();
+
+// Generate Markdown content
+function generateMarkdown(data) {
+    let markdown = `# GATE 90-Day Preparation Tracker\n\n`;
+    markdown += `| Day | Date       | Topics                    | Hours Studied |\n`;
+    markdown += `|-----|------------|---------------------------|---------------|\n`;
+
+    data.forEach((entry) => {
+        markdown += `| ${entry.day}  | ${entry.date} | ${entry.topics || "N/A"} | ${entry.hoursStudied} |\n`;
+    });
+
+    return markdown;
+}
+
+// Fetch tracker data from localStorage
+function getTrackerData() {
+    return JSON.parse(localStorage.getItem("trackerData")) || [];
+}
+
+// Download markdown file
+function downloadMarkdown() {
+    const trackerData = getTrackerData();
+    const markdownContent = generateMarkdown(trackerData);
+
+    // Create a Blob and trigger download
+    const blob = new Blob([markdownContent], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "GATE_Preparation_Tracker.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Attach to a button click in your HTML
+document.getElementById("downloadBtn").addEventListener("click", downloadMarkdown);
+
+// ** Step 5 Code Starts Here **
+// Send tracker data to the backend
+async function sendDataToBackend() {
+    const trackerData = JSON.parse(localStorage.getItem("trackerData"));
+
+    try {
+        const response = await fetch('http://localhost:3000/update-tracker', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(trackerData)
+        });
+
+        const result = await response.json();
+        console.log(result.message); // Log success message from backend
+    } catch (error) {
+        console.error("Error sending data to backend:", error);
+    }
+}
