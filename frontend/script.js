@@ -116,7 +116,7 @@ async function sendDataToBackend() {
     const trackerData = JSON.parse(localStorage.getItem("trackerData"));
 
     try {
-        const response = await fetch('http://localhost:3000/update-tracker', {
+        const response = await fetch('https://tracker-ocoj.vercel.app/update-tracker', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
