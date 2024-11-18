@@ -18,7 +18,14 @@ if (!GITHUB_TOKEN || !REPO_OWNER || !REPO_NAME || !FILE_PATH) {
 
 const octokitPromise = import('@octokit/rest');  // Dynamically import Octokit
 
-app.use(cors());
+// Enable CORS with specific configuration
+const corsOptions = {
+  origin: 'https://your-frontend-url.vercel.app',  // Replace with your actual frontend URL
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions)); // Use CORS with options
 app.use(express.json());  // To parse JSON body from the request
 
 // Function to generate markdown content
@@ -33,6 +40,9 @@ function generateMarkdown(data) {
 
   return markdown;
 }
+
+// Handle preflight (OPTIONS) request for /update-tracker route
+app.options('/update-tracker', cors(corsOptions));
 
 // API route to update the markdown file
 app.post('/update-tracker', async (req, res) => {
