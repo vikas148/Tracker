@@ -5,7 +5,7 @@
 | 1  | 2024-11-18 | ip addressing and classification | 6 |
 | 2  | 2024-11-19 | er model  | 2 |
 | 3  | 2024-11-20 | wwww | 45 |
-| 4  | 2024-11-21 | N/A | 0 |
+| 4  | 2024-11-21 | Algorithms(basics, analysis), DBMS(Transaction schedules) | 4 |
 | 5  | 2024-11-22 | N/A | 0 |
 | 6  | 2024-11-23 | N/A | 0 |
 | 7  | 2024-11-24 | N/A | 0 |
